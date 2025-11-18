@@ -1,12 +1,30 @@
 package com.textmate.aiwriter.TextMate.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.textmate.aiwriter.TextMate.EmailRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Map;
 
 @Service
 public class EmailGeneratorService {
+
+    private final WebClient webClient;
+
+    @Value("${gemini.api.url}")
+    private String geminiApiUrl;
+
+    @Value("${gemini.api.key}")
+    private String geminiApiKey;
+
+    public EmailGeneratorService(WebClient.Builder webClient) {
+        this.webClient = webClient.build();
+    }
+
+
     public String generateEmailReply(EmailRequest emailRequest){
         //Building the prompt
         String prompt= buildPrompt(emailRequest);
@@ -19,6 +37,36 @@ public class EmailGeneratorService {
                 })
                 }
         );
+
+        //Do request and get response
+        String response= webClient.post()
+                .uri(geminiApiUrl+ geminiApiKey)
+                .header("Content-Type", "application/json")
+                .bodyValue(requestBody)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        //Extract Response and Return
+        return extractResponseContent(response);
+
+    }
+
+    private String extractResponseContent(String response) {
+        try{
+            ObjectMapper mapper= new ObjectMapper();
+            JsonNode rootNode = mapper.readTree(response);
+            return rootNode.path("candidates")
+                    .get(0)
+                    .path("content")
+                    .path("parts")
+                    .get(0)
+                    .path("text")
+                    .asText();
+
+        }catch (Exception e){
+            return "Error processing request: "+ e.getMessage();
+        }
     }
 
     private String buildPrompt(EmailRequest emailRequest) {
