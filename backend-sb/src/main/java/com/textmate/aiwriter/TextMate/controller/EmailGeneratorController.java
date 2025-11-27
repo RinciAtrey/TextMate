@@ -3,13 +3,13 @@ package com.textmate.aiwriter.TextMate.controller;
 import com.textmate.aiwriter.TextMate.EmailRequest;
 import com.textmate.aiwriter.TextMate.service.EmailGeneratorService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/email")
 @AllArgsConstructor
+@CrossOrigin(origins="*")
 public class EmailGeneratorController {
 
     private final EmailGeneratorService emailGeneratorService;
