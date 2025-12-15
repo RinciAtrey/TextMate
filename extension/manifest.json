@@ -1,28 +1,45 @@
+
 {
-    "name": "TextMate",
-    "description": "AI-powered email reply generator",
-    "version": "1.0",
-    "manifest_version": 3,
-    "permissions": ["activeTab", "storage"],
-    "host_permissions": [
-        "http://localhost:8080/*",
-        "*://mail.google.com/*"
-    ],
-    "content_scripts": [
-        {
-        "js": ["content.js"],
-        "matches": ["*://mail.google.com/*"],
-        "css": ["content.css"],
-        "run_at": "document_end"
-        }
-    ],
-    "web_accessible_resources": [
+  "name": "TextMate",
+  "description": "AI-powered reply generator",
+  "version": "1.0",
+  "manifest_version": 3,
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": [
+    "http://localhost:8080/*",
+    "*://mail.google.com/*",
+    "*://www.linkedin.com/*",
+    "*://linkedin.com/*",
+    "*://*.slack.com/*",
+    "*://app.slack.com/*"
+  ],
+  "content_scripts": [
     {
-      "resources": [ "icons/*" ],
-      "matches": ["*://mail.google.com/*"]
+      "js": ["content.js"],
+      "matches": ["*://mail.google.com/*"],
+      "css": ["content.css"],
+      "run_at": "document_end"
+    },
+    {
+      "js": ["content-linkedin.js"],
+      "matches": ["*://www.linkedin.com/*", "*://linkedin.com/*"],
+      "css": ["content.css"],
+      "run_at": "document_end"
+    },
+    {
+      "js": ["content-slack.js"],
+      "matches": ["*://*.slack.com/*", "*://app.slack.com/*"],
+      "css": ["content.css"],
+      "run_at": "document_end"
     }
   ],
-    "action": {
-      "default_title": "TextMate"
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/*"],
+      "matches": ["<all_urls>"]
     }
+  ],
+  "action": {
+    "default_title": "TextMate"
   }
+}
