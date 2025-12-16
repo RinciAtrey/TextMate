@@ -189,7 +189,7 @@ function injectSlackButton() {
           else alert('TextMate: failed to generate reply.');
         } finally {
           btn.disabled = false;
-          btn.innerText = 'AI';
+          btn.innerText = 'AI Reply';
         }
       });
 

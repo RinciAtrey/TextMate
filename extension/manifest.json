@@ -4,6 +4,9 @@
   "description": "AI-powered reply generator",
   "version": "1.0",
   "manifest_version": 3,
+   "icons": {
+    "128": "icons/logo.png"
+  },
   "permissions": ["activeTab", "storage"],
   "host_permissions": [
     "http://localhost:8080/*",
@@ -40,6 +43,9 @@
     }
   ],
   "action": {
-    "default_title": "TextMate"
+    "default_title": "TextMate",
+    "default_icon": {
+      "128": "icons/logo.png"
+    }
   }
 }
